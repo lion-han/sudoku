@@ -1,2 +1,4 @@
 ﻿  sudoku.cpp
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(150): warning C4101: “y_0”: 未引用的局部变量
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(150): warning C4101: “x_0”: 未引用的局部变量
   sudoku.vcxproj -> D:\我的文档\桌面\大三上\软件工程\sudoku\Debug\sudoku.exe

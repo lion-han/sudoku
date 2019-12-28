@@ -164,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="question.txt" />
+    <Text Include="solution.txt" />
     <Text Include="zhongju.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
