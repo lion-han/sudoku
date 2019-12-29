@@ -1,5 +1,16 @@
-﻿  sudoku.cpp
-d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(150): warning C4101: “y_0”: 未引用的局部变量
-d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(150): warning C4101: “x_0”: 未引用的局部变量
-d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(232): warning C4101: “ch”: 未引用的局部变量
-  sudoku.vcxproj -> D:\我的文档\桌面\大三上\软件工程\sudoku\Debug\sudoku.exe
+﻿D:\VisualStudio\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output 目录未以斜杠结尾。  此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
+  sudoku.cpp
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(94): warning C4473: “printf”: 没有为格式字符串传递足够的参数
+  d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(94): note: 占位符和其参数预计 1 可变参数，但提供的却是 0 参数
+  d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(94): note: 缺失的可变参数 1 为格式字符串“%d”所需
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(169): warning C4101: “y_0”: 未引用的局部变量
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(169): warning C4101: “x_0”: 未引用的局部变量
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(282): warning C4473: “printf”: 没有为格式字符串传递足够的参数
+  d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(282): note: 占位符和其参数预计 1 可变参数，但提供的却是 0 参数
+  d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(282): note: 缺失的可变参数 1 为格式字符串“%d”所需
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(292): warning C4473: “printf”: 没有为格式字符串传递足够的参数
+  d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(292): note: 占位符和其参数预计 1 可变参数，但提供的却是 0 参数
+  d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(292): note: 缺失的可变参数 1 为格式字符串“%d”所需
+d:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\sudoku.cpp(251): warning C4101: “ch”: 未引用的局部变量
+  sudoku.vcxproj -> D:\我的文档\桌面\大三上\软件工程\sudoku\sudoku\..\sudoku.exe
