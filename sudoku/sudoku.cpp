@@ -1,5 +1,3 @@
-// sudoku.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-
 //$(SolutionDir)$(Configuration)
 #include "pch.h"
 #include <iostream>
@@ -10,6 +8,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<ctime>
+#include <windows.h>
 using namespace std;
 #define size 9
 #define me 6
@@ -18,23 +17,27 @@ using namespace std;
 #define	SOLUTIONPATH "solution.txt"
 //(3+2)%9+1=6
 char question[9][9];
+string temp;
 
 int isvalue(int x, int y, int value);
 int slove(char que[][9], int x, int y);
 int generate_final(int sum, char *filepath);
-void generate_que(int num_solution);
+int generate_que(int num_solution);
 int slove_all(char *filepath);
-
 
 int main(int argc, char* argv[])
 {
 	
 	char finalpath[50] = { FINALPATH };
 	char questionpath[50] = { QUESTIONPATH };
-	//generate_final(10, finalpath);
+	DWORD startTime = GetTickCount();//计时开始
+	generate_final(10000, finalpath);
+	DWORD endTime = GetTickCount();//计时结束
+	cout << "The run time is:" << endTime - startTime << "ms" << endl;
 	//generate_que(5);
 	//slove_all(questionpath);
 
+	return 0;
 	if (argc >= 4) {
 		printf("Please enter the correct command format. \nFor example:---------\n");
 		printf("sudoku.exe -c Num:      final Sudoku number\n");
@@ -68,7 +71,10 @@ int main(int argc, char* argv[])
 			//printf("生成数独终局数 最大为 1e6\n");
 			return 0;
 		}
+		DWORD startTime = GetTickCount();//计时开始
 		generate_final(num, finalpath);
+		DWORD endTime = GetTickCount();//计时结束
+		cout << "The run time is:" << endTime - startTime << "ms" << endl;
 	}
 	//解数独
 	if (strcmp(argv[1], "-s") == 0) {
@@ -119,15 +125,77 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+//直接写入
+//int generate_final(int sum, char *filepath) {
+//
+//	string one = { "612345789" };//初始行
+//	string oneone;
+//	string all[10];
+//	//"zhongju.txt"
+//
+//	int i = 0, j = 0, n = 1;
+//	//由第一行移动位数
+//	int sequence[9] = { 0,3, 6, 2, 8, 5, 1, 7, 4 };
+//
+//
+//	ofstream ofile;
+//	ofile.open(filepath);
+//
+//	//生成数独
+//	while (n <= sum) {
+//		next_permutation(one.begin() + 1, one.end());//全排列
+//		oneone = one + one;
+//		//移动
+//		for (i = 0; i < 9; i++) {
+//			all[i] = oneone.substr(sequence[i], 9);
+//		}
+//		//写入
+//		for (i = 0; i < 9; i++) {
+//			for (j = 0; j < 8; j++) {
+//				ofile << all[i][j];
+//				ofile << ' ';
+//			}
+//			ofile << all[i][8] << endl;
+//		}
+//		if (n != sum) {
+//			ofile << endl;
+//		}
+//		n++;
+//	}
+//	ofile.close();
+//	printf("%d final Sudokus generated. filepath: %s\n", sum, filepath);
+//	//printf("已生成%d个终局至文件%s.\n", sum, filepath);
+//	return 1;
+//}
 
+//两个换，12+两个换，34+后三个换，45+后三个换，35+后三个换，12+34+后三个换，12+45+后三个换，12+35+67
+
+int swap_line[30][9] = { {0,1,2,3,4,5,6,7,8},{0,2,1,3,4,5,6,7,8} ,\
+{0,1,2,3,5,4,6,7,8},{0,1,2,4,3,5,6,7,8},{0,1,2,5,4,3,6,7,8},\
+{0,1,2,3,4,5,7,6,8},{0,1,2,3,4,5,6,8,7},{0,1,2,3,4,5,8,7,6},\
+
+{0,2,1,3,5,4,6,7,8},{0,2,1,4,3,5,6,7,8},{0,2,1,5,4,3,6,7,8},\
+{0,2,1,3,4,5,7,6,8},{0,2,1,3,4,5,6,8,7},{0,2,1,3,4,5,8,7,6},\
+
+{0,1,2,4,3,5,7,6,8},{0,1,2,4,3,5,6,8,7},{0,1,2,4,3,5,8,7,6},\
+{0,1,2,3,5,4,7,6,8},{0,1,2,3,5,4,6,8,7},{0,1,2,3,5,4,8,7,6},\
+{0,1,2,5,4,3,7,6,8},{0,1,2,5,4,3,6,8,7},{0,1,2,5,4,3,8,7,6},\
+
+{0,2,1,4,3,5,7,6,8},{0,2,1,4,3,5,6,8,7},{0,2,1,4,3,5,8,7,6},\
+{0,2,1,3,5,4,7,6,8},{0,2,1,3,5,4,6,8,7},{0,2,1,3,5,4,8,7,6},\
+{0,2,1,5,4,3,7,6,8}
+ };
+char final[2000010];
 int generate_final(int sum, char *filepath) {
 
 	string one = { "612345789" };//初始行
 	string oneone;
+	//char final[2000010];
+	memset(final, 0, sizeof(final));
 	string all[10];
 	//"zhongju.txt"
-
-	int i = 0, j = 0, n = 1;
+	
+	int i = 0, j = 0, n = 1,k=0,s=0;
 	//由第一行移动位数
 	int sequence[9] = { 0,3, 6, 2, 8, 5, 1, 7, 4 };
 
@@ -137,32 +205,74 @@ int generate_final(int sum, char *filepath) {
 
 	//生成数独
 	while (n <= sum) {
+		k = 0;
+		s = 0;
 		next_permutation(one.begin() + 1, one.end());//全排列
 		oneone = one + one;
 		//移动
 		for (i = 0; i < 9; i++) {
 			all[i] = oneone.substr(sequence[i], 9);
 		}
+		//swap_string(all[4], all[5]);
 		//写入
-		for (i = 0; i < 9; i++) {
-			for (j = 0; j < 8; j++) {
-				ofile << all[i][j];
-				ofile << ' ';
-			}
-			ofile << all[i][8] << endl;
+		
+		for ( s = 0; s < 30; s++) {
+			//k = 0;
+			for (i = 0; i < 9; i++) {
+				for (j = 0; j < 8; j++) {
+					final[k] = all[swap_line[s][i]][j];
+					k++;	
+					final[k] = ' ';
+					k++;
+				}
+				final[k] = all[i][8]; 
+				k++;
+				final[k] = '\n';
+				k++;
+				}
+				//ofile << final;
+				if (n != sum) {
+					//ofile << endl;
+					final[k] = '\n';
+					k++;
+				}
+				else {
+					ofile << final;
+					ofile.close();
+					printf("%d final sudokus generated. filepath: %s\n", sum, filepath);
+					//printf("已生成%d个终局至文件%s.\n", sum, filepath);
+					return 1;
+				}
+				n++;
 		}
+		
+
+		/*for (i = 0; i < 9; i++) {
+			for (j = 0; j < 8; j++) {
+				final[k] = all[i][j];
+				k++;
+				final[k] = ' ';
+				k++;
+			}
+			final[k] = all[i][8];
+			k++;
+			final[k] = '\n';
+			k++;
+		}
+		ofile << final;
 		if (n != sum) {
 			ofile << endl;
 		}
-		n++;
+		n++;*/
 	}
 	ofile.close();
-	printf("%d final Sudokus generated. filepath: %s\n", sum, filepath);
+	printf("%d final sudokus generated. filepath: %s\n", sum, filepath);
 	//printf("已生成%d个终局至文件%s.\n", sum, filepath);
 	return 1;
 }
 
-void generate_que(int num_solution) {
+
+int generate_que(int num_solution) {
 	//string filepath = FINALPATH;
 	int i = 0, j = 0, jj = 0, k;
 	int degree = 5;//难度级别，即有0.degree的空
@@ -210,6 +320,7 @@ void generate_que(int num_solution) {
 	}
 	ofile.close();
 	ifile.close();
+	return 1;
 	////输出到cout
 	//for (i = 0; i < 9; i++) {
 	//	for (j = 0; j < 9; j++) {			
@@ -380,4 +491,3 @@ int isvalue(int x, int y, int value) {
 
 
 }
-
