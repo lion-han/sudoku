@@ -63,11 +63,6 @@
       </PostinstrumentEvent>
     </Binary>
   </Binaries>
-  <Reports>
-    <Report>
-      <Path>sudoku200102.vsp</Path>
-    </Report>
-  </Reports>
   <Launches>
     <Binary>
       <Path>sudoku.exe</Path>

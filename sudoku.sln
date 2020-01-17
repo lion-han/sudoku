@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sudoku", "sudoku\sudoku.vcxproj", "{EC80EEF7-C52C-45CF-8B3A-BD7E44304DD8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sudoke_Test", "sudoke_Test\sudoke_Test.vcxproj", "{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -24,12 +26,26 @@ Global
 		{EC80EEF7-C52C-45CF-8B3A-BD7E44304DD8}.Release|x64.Build.0 = Release|x64
 		{EC80EEF7-C52C-45CF-8B3A-BD7E44304DD8}.Release|x86.ActiveCfg = Release|Win32
 		{EC80EEF7-C52C-45CF-8B3A-BD7E44304DD8}.Release|x86.Build.0 = Release|Win32
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Debug|x64.ActiveCfg = Debug|x64
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Debug|x64.Build.0 = Debug|x64
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Debug|x86.ActiveCfg = Debug|Win32
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Debug|x86.Build.0 = Debug|Win32
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Release|x64.ActiveCfg = Release|x64
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Release|x64.Build.0 = Release|x64
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Release|x86.ActiveCfg = Release|Win32
+		{9E1B6015-15A8-44ED-A212-CE2FCF97EB5D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8ECDFCBB-7ECA-42B2-AD17-7FD2F9157F69}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
