@@ -10,7 +10,6 @@
 #include<ctime>
 #include <windows.h>
 using namespace std;
-#define size 9
 #define me 6
 #define FINALPATH "final_sudoku.txt"
 #define QUESTIONPATH "question.txt"
@@ -19,7 +18,7 @@ using namespace std;
 char question[9][9];
 char final[12000];
 
-
+int mainfun(int argc, char* argv[]);
 int generate_final(int sum, char *filepath);
 int generate_que(int num_solution);
 int generate_queall();
@@ -157,20 +156,106 @@ int swap_line[30][9] = { {0,1,2,3,4,5,6,7,8},{0,2,1,3,4,5,6,7,8} ,\
 //}
 //60次ofstream写入
 
+int mainfun(int argc, char* argv[]) {
+	char finalpath[50] = { FINALPATH };
+	char questionpath[50] = { QUESTIONPATH };
+	if (argc !=3) {
+		printf("Please enter the correct command format. \nFor example:---------\n");
+		printf("sudoku.exe -c Num:      final Sudoku number\n");
+		printf("sudoku.exe -s filePath: solve Sudoku, filePath: file path of the question\n");
+		printf("-----------------------------------------------------");
+		/*printf("请输入正确命令格式.\n-----------例如：------------------\n");
+		printf("sudoku.exe -c Num:生成Num个数独终局.\n");
+		printf("sudoku.exe -s filePath:解数独,file为文件路径.\n");
+		printf("-----------------------------------------------------");*/
+		return 1;
+	}
+	//数独生成
+	if (strcmp(argv[1], "-c") == 0) {
+		int len = strlen(argv[2]);
+		if (len > 7) {
+			printf("The final Sudoku number must be an integer. Scope:0~1e6\n");
+			//printf("生成数独终局数 必须为整数.范围：0~1e6\n");
+			return 2;
+		}
+		for (int i = 0; i < len; i++) {
+			if (argv[2][i] > '9' || argv[2][i] < '0') {
+				printf("The final Sudoku number must be an integer. Scope:0~1e6\n");
+				//printf("生成数独终局数 必须为整数.范围：0~1e6\n");
+				return 2;
+			}
+		}
+		int num = atoi(argv[2]);
+		if (num > 1000000) {
+			printf("The final Sudoku number   Maximum:1e6\n");
+			//printf("生成数独终局数 最大为 1e6\n");
+			return 2;
+		}
+		DWORD startTime = GetTickCount64();//计时开始
+		generate_final(num, finalpath);
+		DWORD endTime = GetTickCount64();//计时结束
+		cout << "The run time is:" << endTime - startTime << "ms" << endl;
+		return 0;
+	}
+	//解数独
+	if (strcmp(argv[1], "-s") == 0) {
+		int len = strlen(argv[2]);
+		char solutionpath[150];
+		strcpy_s(solutionpath, argv[1]);
+
+		if (len >= 150) {
+			printf("File name exceeds limited length, please enter the correct file name.\n");
+			//printf("文件名超过限定长度，请输入正确文件名.\n");
+			return 2;
+		}
+		slove_all(argv[2]);
+		return 0;
+	}
+
+	if (strcmp(argv[1], "-q") == 0) {
+		if (strcmp(argv[2], "all") == 0) {
+			generate_queall();
+			return 0;
+		}
+		int len = strlen(argv[2]);
+
+		for (int i = 0; i < len; i++) {
+			if (argv[2][i] > '9' || argv[2][i] < '0') {
+				printf("The generate Sudoku number must be an integer. Scope:0~1e6\n");
+				//printf("生成数独题目 必须为整数.范围：0~1e6\n");
+				return 2;
+			}
+		}
+		int num = atoi(argv[2]);
+		if (num > 1000000) {
+			printf("Please input a litter number.\n");
+			return 2;
+		}
+		generate_que(num);
+		printf("Generated %d question of sudoku.\n", num);
+		return 0;
+	}
+	return 2;
+}
+
 int generate_final(int sum, char *filepath) {
 
-	char one[] = "612345789";//初始行
+	char one[] = "612345789";//初始行 6为(3+2)%9+1 
 	char oneone[19];
-	char all[9][9];
+	char all[9][9];//存储每个数独
 	int i = 0, j = 0, n = 1, k = 0, s = 0, sign = 0;
-	int sequence[9] = { 0,3, 6, 2, 8, 5, 1, 7, 4 };	//由第一行移动位数
+	int sequence[9] = { 0,3, 6, 2, 8, 5, 1, 7, 4 };	//其他行由第一行移动位数
 
 	memset(oneone, 0, sizeof(oneone));
 	memset(final, 0, sizeof(final));
 
 	ofstream ofile;
 	ofile.open(filepath);
-
+	//打开文件判断
+	if (!ofile) {
+		printf("Open final file error.\n");
+		return 1;
+	}
 	//生成数独
 	while (n <= sum) {
 
@@ -187,25 +272,20 @@ int generate_final(int sum, char *filepath) {
 			}
 		}
 		//写入		
-		for (s = 0; s < 30; s++) {
-
+		for (s = 0; s < 30; s++) {//30中不同行交换一组
 			for (i = 0; i < 9; i++) {
 				for (j = 0; j < 8; j++) {
-
 					final[k] = all[swap_line[s][i]][j];
 					k++;
 					final[k] = ' ';
 					k++;
 				}
-				final[k] = all[swap_line[s][i]][8];
+				final[k] = all[swap_line[s][i]][8];//实现交换行
 				k++;
 				final[k] = '\n';
 				k++;
 			}
-
-			//ofile << final;
 			if (n != sum) {
-				//ofile << endl;
 				final[k] = '\n';
 				k++;
 			}
@@ -215,18 +295,17 @@ int generate_final(int sum, char *filepath) {
 				ofile.close();
 				printf("%d final sudokus generated. filepath: %s\n", sum, filepath);
 				//printf("已生成%d个终局至文件%s.\n", sum, filepath);
-				return 1;
+				return 0;
 			}
 			n++;
 		}
-		if (sign == 2) {
+		if (sign == 2) { //2*30次写入文件
 			ofile << final;
 			sign = 0;
 			k = 0;
 		}
-
 	}
-	return 1;
+	return 0;
 }
 
 //fputs写入方式60
@@ -469,18 +548,18 @@ int generate_que(int num_solution) {
 
 	if (!ifile) {
 			printf("Open final file error.\n");
-			return 2;
+			return 1;
 		}
 	ifile.close();
+	//判断生成的数目是否大于终局的数目
 	int sumline=linenum(finalpath);
 	if (sumline < num_solution) {
 		printf("ERROR:num_solution is greater than final sudoku number.\n");
-		return 3;
+		return 2;
 	}
 
 	ifile.open(FINALPATH);//从终局 FINALPATH 中产生题目
 	ofile.open(QUESTIONPATH);//将问题输出到 QUESTIONPATH
-
 
 	for (k = 0; k < num_solution; k++) {
 		//读终局文件
@@ -515,7 +594,7 @@ int generate_que(int num_solution) {
 	ofile.close();
 	ifile.close();
 	printf("Having  generated %d sodoku questions.\n", num_solution);
-	return 1;
+	return 0;
 	////输出到cout
 	//for (i = 0; i < 9; i++) {
 	//	for (j = 0; j < 9; j++) {			
@@ -564,12 +643,12 @@ int generate_queall() {
 	
 	if (!ifile) {
 		printf("Open final file error.\n");
-		return 2;
+		return 1;
 	}
 	ifile.get();
 	if (ifile.eof()) {
 		printf("error: file is empty.\n");
-		return 3;
+		return 2;
 	}
 	ifile.seekg(0, ios::beg);//将文件指针定位到开头
 
@@ -606,10 +685,10 @@ int generate_queall() {
 			ofile.close();
 			ifile.close();
 			printf("Having  generated %d sodoku questions.\n", count);
-			return 1;
+			return 0;
 		}
 	}
-	return 1;
+	return 0;
 }
 
 int slove_all_1(char *filepath) {
@@ -690,17 +769,17 @@ int slove_all(char *filepath) {
 
 	if (!ifile) {
 		printf("Open question file error.\n");
-		return 2;
+		return 1;
 	}
 	//判断是否为空
 	ifile.get();
 	if (ifile.eof()) {
 		printf("error: File is empty.\n");
-		return 3;
+		return 2;
 	}
 	ifile.seekg(0, ios::beg);//将文件指针定位到开头
 	while (++count) {
-
+		//读取一个数独
 		for (i = 0; i < 9; i++) {
 			getline(ifile, line);
 			for (j = 0, jj = 0; j < 9; j++) {
@@ -714,11 +793,10 @@ int slove_all(char *filepath) {
 		else {
 			getline(ifile, line);
 		}
-
+		//解数独
 		if (slove(question, 0, 0)) {
 			k = 0;
 			//printf("%dnd sudoku solution completed.\n", count);
-			//printf("第%d个数独 解完成.\n", count);
 			for (i = 0; i < 9; i++) {
 				for (j = 0; j < 8; j++) {
 
@@ -732,12 +810,12 @@ int slove_all(char *filepath) {
 				solution[k] = '\n';
 				k++;
 			}
-
 		}
-		else {
+		else { //无解
 			printf("%dnd sudoku solution is not exist.\n", count);
 			//printf("第%d个数独 无解.\n", count);
 		}
+		//末尾处理
 		if (end == 1) {
 			solution[k] = '\0';
 			ofile << solution;
@@ -752,7 +830,7 @@ int slove_all(char *filepath) {
 	}
 	printf("Solving sudoku is over. sum is %d\n", count);
 	//printf("数独解完成,共%d个.\n", count);
-	return 1;
+	return 0;
 }
 
 int slove(char que[][9], int x, int y) {
@@ -774,7 +852,7 @@ int slove(char que[][9], int x, int y) {
 			next_x++;
 		}
 	}
-
+	//边界判断
 	if (que[x][y] != '0') {
 		if (x == 8 && y == 8) {
 			return 1;
@@ -784,7 +862,7 @@ int slove(char que[][9], int x, int y) {
 		}
 		else return 0;
 	}
-
+	//递归深搜
 	for (value = 1; value <= 9; value++) {
 		if (isvalue(x, y, value)) {
 			que[x][y] = value + '0';

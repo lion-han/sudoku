@@ -8,54 +8,54 @@ bool value_file(int all, char *filepath);
 bool isvalue_sudoku(char *filepath);
 
 
-//TEST(GenerateTest, size0) {
-//	generate_final(0, FINALPATH);
-//	int sign = value_file(0, FINALPATH);
-//	EXPECT_TRUE(sign);
-//}
-//TEST(GenerateTest, size1) {
-//	generate_final(1, FINALPATH);
-//	int sign = value_file(1, FINALPATH);
-//	EXPECT_TRUE(sign);
-//}
-//TEST(GenerateTest, size50) {
-//	generate_final(50, FINALPATH);
-//	int sign = value_file(50, FINALPATH);
-//	EXPECT_TRUE(sign);
-//}
-//TEST(GenerateTest, size1e6) {
-//	generate_final(1000000, FINALPATH);
-//	int sign = value_file(1000000, FINALPATH);
-//	EXPECT_TRUE(sign);
-//}
-//
-////测试解数独结果的正确性，保证数独题目文件内有题目，否则先生成数独题目
-//TEST(SolutionTest, answersright) {
-//	ifstream ifile;
-//	ifile.open(QUESTIONPATH);
-//	if (!ifile) {
-//		generate_que(10);
-//	}
-//	ifile.close();
-//	slove_all(QUESTIONPATH);
-//	int sign=isvalue_sudoku(SOLUTIONPATH);
-//	EXPECT_TRUE(sign);
-//}
-////测试解数独，当数独文件不存在时
-//TEST(SolutionTest, nofile) {
-//	char filename[] = "jjjj.txt";
-//	int sign=slove_all(filename);
-//	EXPECT_EQ(sign, 2);
-//}
-////测试解数独，当数独文件为空时
-//TEST(SolutionTest, emptyfile) {
-//	char filename[] = "text_empty.txt";
-//	ofstream ofile;
-//	ofile.open(filename);
-//	ofile.close();
-//	int sign = slove_all(filename);
-//	EXPECT_EQ(sign,3 );
-//}
+TEST(GenerateTest, size0) {
+	generate_final(0, FINALPATH);
+	int sign = value_file(0, FINALPATH);
+	EXPECT_TRUE(sign);
+}
+TEST(GenerateTest, size1) {
+	generate_final(1, FINALPATH);
+	int sign = value_file(1, FINALPATH);
+	EXPECT_TRUE(sign);
+}
+TEST(GenerateTest, size50) {
+	generate_final(50, FINALPATH);
+	int sign = value_file(50, FINALPATH);
+	EXPECT_TRUE(sign);
+}
+TEST(GenerateTest, size1e6) {
+	generate_final(1000000, FINALPATH);
+	int sign = value_file(1000000, FINALPATH);
+	EXPECT_TRUE(sign);
+}
+
+//测试解数独结果的正确性，保证数独题目文件内有题目，否则先生成数独题目
+TEST(SolutionTest, answersright) {
+	ifstream ifile;
+	ifile.open(QUESTIONPATH);
+	if (!ifile) {
+		generate_que(10);
+	}
+	ifile.close();
+	slove_all(QUESTIONPATH);
+	int sign=isvalue_sudoku(SOLUTIONPATH);
+	EXPECT_TRUE(sign);
+}
+//测试解数独，当数独文件不存在时
+TEST(SolutionTest, nofile) {
+	char filename[] = "jjjj.txt";
+	int sign=slove_all(filename);
+	EXPECT_EQ(sign, 1);
+}
+//测试解数独，当数独文件为空时
+TEST(SolutionTest, emptyfile) {
+	char filename[] = "text_empty.txt";
+	ofstream ofile;
+	ofile.open(filename);
+	ofile.close();
+	int sign = slove_all(filename);
+	EXPECT_EQ(sign,2 );
+}
 
 
 TEST(LineNum, size0) {
@@ -89,6 +89,65 @@ TEST(LineNum, size1000) {
 	EXPECT_EQ(sign, 1000);
 }
 
+//测试参数个数
+TEST(MainTest, size2) {
+	char *temp[] = { " ","-c" };
+	int sign = mainfun(2, temp);
+	EXPECT_EQ(sign, 1);
+}
+TEST(MainTest, size4) {
+	char *temp[] = { " ","-c","100","11" };
+	int sign = mainfun(4, temp);
+	EXPECT_EQ(sign, 1);
+}
+//测试 -c 参数
+TEST(MainTest, c1) {
+	char *temp[] = { " ","-c","1" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 0);
+}
+TEST(MainTest, c_2) {
+	char *temp[] = { " ","-c","-2" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
+TEST(MainTest, c1000000) {
+	char *temp[] = { " ","-c","1000000" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 0);
+}
+TEST(MainTest, c1000008) {
+	char *temp[]= { " ","-c","1000008" };
+	int sign=mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
+TEST(MainTest, cab) {
+	char *temp[] = { " ","-c","ab" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
+//测试 -q 参数
+TEST(MainTest, qaa) {
+	char *temp[] = { " ","-q","aa" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
+TEST(MainTest, q_1) {
+	char *temp[] = { " ","-q","-1" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
+TEST(MainTest, qall) {
+	char *temp[] = { " ","-q","all" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
+//测试 其他 参数
+TEST(MainTest, otheraa) {
+	char *temp[] = { " ","-aa","100" };
+	int sign = mainfun(3, temp);
+	EXPECT_EQ(sign, 2);
+}
 int _tmain(int argc, char* argv[])
 {
 	testing::InitGoogleTest(&argc, argv);
