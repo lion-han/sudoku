@@ -174,20 +174,21 @@ int mainfun(int argc, char* argv[]) {
 	if (strcmp(argv[1], "-c") == 0) {
 		int len = strlen(argv[2]);
 		if (len > 7) {
-			printf("The final Sudoku number must be an integer. Scope:0~1e6\n");
+			printf("The final Sudoku number must be an integer. Scope:1~1e6\n");
 			//printf("生成数独终局数 必须为整数.范围：0~1e6\n");
 			return 2;
 		}
 		for (int i = 0; i < len; i++) {
 			if (argv[2][i] > '9' || argv[2][i] < '0') {
-				printf("The final Sudoku number must be an integer. Scope:0~1e6\n");
+				printf("The final Sudoku number must be an integer. Scope:1~1e6\n");
 				//printf("生成数独终局数 必须为整数.范围：0~1e6\n");
 				return 2;
 			}
 		}
 		int num = atoi(argv[2]);
-		if (num > 1000000) {
-			printf("The final Sudoku number   Maximum:1e6\n");
+		if (num > 1000000||num<=0) {
+			printf("The final Sudoku number must be an integer. Scope:1~1e6\n");
+			//printf("The final Sudoku number   Maximum:1e6\n");
 			//printf("生成数独终局数 最大为 1e6\n");
 			return 2;
 		}
